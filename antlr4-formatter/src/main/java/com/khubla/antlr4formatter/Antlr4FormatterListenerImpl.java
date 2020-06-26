@@ -66,7 +66,7 @@ public class Antlr4FormatterListenerImpl implements FormatterListener {
    /**
     * rules which need a NL after the rule
     */
-   private static final Set<Class<?>> newlineAfterRules = new HashSet<Class<?>>(Arrays.asList(new Class<?>[] { GrammarDeclContext.class, ParserRuleSpecContext.class, LexerRuleSpecContext.class }));
+   private static final Set<Class<?>> newlineAfterRules = new HashSet<Class<?>>(Arrays.asList(new Class<?>[] { GrammarDeclContext.class }));
    /**
     * rules which colon on new line
     */
@@ -81,7 +81,7 @@ public class Antlr4FormatterListenerImpl implements FormatterListener {
     */
    private static final Set<Class<?>> indentedeRules = new HashSet<Class<?>>(Arrays.asList(new Class<?>[] { ParserRuleSpecContext.class, LexerRuleSpecContext.class}));
    
-   private static final Set<Class<?>> spaceAfterRules = new HashSet<Class<?>>(Arrays.asList(new Class<?>[] { ActionBlockContext.class}));
+   private static final Set<Class<?>> doubleTabAfterRules = new HashSet<Class<?>>(Arrays.asList(new Class<?>[] { ActionBlockContext.class}));
    /**
     * tokens which need a newline before them
     */
@@ -169,8 +169,8 @@ public class Antlr4FormatterListenerImpl implements FormatterListener {
       if (newlineBeforeRules.contains(ctx.getClass())) {
          writeCR();
       }
-	  if (spaceAfterRules.contains(ctx.getClass())){
-		  writeSimple(" ");
+	  if (doubleTabAfterRules.contains(ctx.getClass())){
+		  writeSimple("\t\t");
 	  }
       if (indentedeRules.contains(ctx.getClass())) {
          indent++;
@@ -276,14 +276,17 @@ public class Antlr4FormatterListenerImpl implements FormatterListener {
                }
             }
          }
+		 if (node.toString().contains(":")) {
+			 writeSimple("\t");
+		 }
          /*
           * some rules want the ';' on a new line (like ParserRuleSpecContext, LexerRuleSpecContext)
           */
-         if (node.toString().compareTo(";") == 0) {
-            if (colonOnNewlineRules.contains(node.getParent().getClass())) {
-               writeCR();
-            }
-         }
+//         if (node.toString().compareTo(";") == 0) {
+//            if (colonOnNewlineRules.contains(node.getParent().getClass())) {
+//               writeCR();
+//            }
+//         }
          /*
           * write the node
           */
