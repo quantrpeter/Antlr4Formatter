@@ -75,15 +75,17 @@ public class Antlr4FormatterListenerImpl implements FormatterListener {
     * rules which need a NL before the rule
     */
    private static final Set<Class<?>> newlineBeforeRules = new HashSet<Class<?>>(Arrays.asList(new Class<?>[] { PrequelConstructContext.class, GrammarDeclContext.class, ParserRuleSpecContext.class,
-         LexerRuleSpecContext.class, OptionsSpecContext.class, ModeSpecContext.class, ActionBlockContext.class }));
+         LexerRuleSpecContext.class, OptionsSpecContext.class, ModeSpecContext.class /*, ActionBlockContext.class*/ }));
    /**
     * rules which need an indent
     */
-   private static final Set<Class<?>> indentedeRules = new HashSet<Class<?>>(Arrays.asList(new Class<?>[] { ParserRuleSpecContext.class, LexerRuleSpecContext.class }));
+   private static final Set<Class<?>> indentedeRules = new HashSet<Class<?>>(Arrays.asList(new Class<?>[] { ParserRuleSpecContext.class, LexerRuleSpecContext.class}));
+   
+   private static final Set<Class<?>> spaceAfterRules = new HashSet<Class<?>>(Arrays.asList(new Class<?>[] { ActionBlockContext.class}));
    /**
     * tokens which need a newline before them
     */
-   private static final Set<String> newlineBeforeTokens = new HashSet<String>(Arrays.asList(new String[] { ":", "|" }));
+   private static final Set<String> newlineBeforeTokens = new HashSet<String>(Arrays.asList(new String[] { /*":",*/ "|" }));
    /**
     * rules which are interpreted as literal
     */
@@ -167,6 +169,9 @@ public class Antlr4FormatterListenerImpl implements FormatterListener {
       if (newlineBeforeRules.contains(ctx.getClass())) {
          writeCR();
       }
+	  if (spaceAfterRules.contains(ctx.getClass())){
+		  writeSimple(" ");
+	  }
       if (indentedeRules.contains(ctx.getClass())) {
          indent++;
       }
